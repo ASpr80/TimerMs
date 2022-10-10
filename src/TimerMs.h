@@ -19,6 +19,7 @@
     v1.0 - релиз
     v1.1 - добавил микросекундный режим
 	v1.1.1 - небольшой фикс
+    v1.2 - фикс функции stop
 */
 
 #ifndef _TimerMs_h
@@ -78,14 +79,14 @@ public:
     
     // продолжить после остановки
     void resume() {
+        if (!_state) _tmr = uptime() - _buf;
         _state = true;
-        _tmr = uptime() - _buf;
     }
     
     // остановить/приостановить таймер
     void stop() {
+        if (_state) _buf = uptime() - _tmr;
         _state = false;
-        _buf = uptime() - _tmr;
     }
     
     // принудительно переполнить таймер
